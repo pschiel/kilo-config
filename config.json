@@ -1,19 +1,19 @@
 {
-  "$schema": "https://opencode.ai/config.json",
   "snapshot": true,
   "instructions": ["AGENTS.md"],
   "skills": {"paths": ["~/.agents/skills"]},
-  "model": "github-copilot/gpt-5.2-codex",
+  "model": "github-copilot/gpt-5-mini",
   "small_model": "github-copilot/gpt-5-mini",
   "experimental": {
     "openTelemetry": false
   },
   "agent": {
-    "build": {},
-    "draft": { "disable": false },
+    "build": { "disable": false },
     "plan": { "disable": false },
-    "grok": {},
-    "local": {}
+    "draft": { "disable": false },
+    "grok": { "disable": false },
+    "local": { "disable": false },
+    "kilo-cloud": { "disable": false }
   },
   "tui": {
     "scroll_speed": 3,
@@ -21,29 +21,6 @@
       "enabled": false
     }
   },
-  "permission": {
-    "bash": "allow",
-    "batch": "allow",
-    "codesearch": "allow",
-    "doom_loop": "ask",
-    "edit": "allow",
-    "external_directory": "allow",
-    "glob": "allow",
-    "grep": "allow",
-    "lsp": "allow",
-    "question": "deny",
-    "read": "allow",
-    "skill": "allow",
-    "task": "allow",
-    "todoread": "allow",
-    "todowrite": "allow",
-    "webfetch": "allow",
-    "websearch": "allow",
-    "write": "allow",
-    "speak": "deny",
-    "calculate": "deny"
-  },
-
   "mcp": {
     "mysql": {
       "type": "local",

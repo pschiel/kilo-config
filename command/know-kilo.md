@@ -35,18 +35,18 @@ Kilo is a unified server/client for AI interaction with remote control and web v
   - Switch with Tab key or @ mention subagents
   - Environment context auto-added: working directory, git status, platform, date
   - Can load custom instructions from `AGENTS.md`, `CLAUDE.md` files (project and global)
-  - Reference: `$KILO_BASE/packages/web/src/content/docs/agents.mdx`
+  - Reference: `$KILO_BASE/kilo/packages/web/src/content/docs/agents.mdx`
 
 - **Agent Skills**: Reusable instructions loaded on-demand via native `skill` tool
   - Agent auto-discovers and loads when task matches description
   - Search paths: `~/.kilo/skill/`, `~/.config/kilo/skill/`, `~/.agents/skill/`
   - Permissions: allow/deny/ask patterns per skill
-  - Reference: `$KILO_BASE/packages/web/src/content/docs/skills.mdx`
+  - Reference: `$KILO_BASE/kilo/packages/web/src/content/docs/skills.mdx`
 
 - **Commands**: Prompt snippets for manual execution via slash commands
   - Location: `~/.config/kilo/command/{name}.md`
   - User-invoked with `/command-name`, not auto-discovered
-  - Reference: `$KILO_BASE/packages/web/src/content/docs/commands.mdx`
+  - Reference: `$KILO_BASE/kilo/packages/web/src/content/docs/commands.mdx`
 
 **Tooling**:
 
@@ -54,40 +54,80 @@ Kilo is a unified server/client for AI interaction with remote control and web v
   - Built-in: filesystem (read/write/edit), bash, grep, glob, todos, webfetch
   - Custom: Implement `Tool.Info` interface with `execute()` method
   - LSP auto-integration: Write/Edit tools automatically get syntax validation
-  - Examples: `$KILO_BASE/packages/opencode/src/tool/{calculate,speak}.ts`
-  - Reference: `$KILO_BASE/packages/web/src/content/docs/{tools,custom-tools}.mdx`
+  - Examples: `$KILO_BASE/kilo/packages/opencode/src/tool/{calculate,speak}.ts`
+  - Reference: `$KILO_BASE/kilo/packages/web/src/content/docs/{tools,custom-tools}.mdx`
 
 - **MCP**: External tool servers (Model Context Protocol)
   - Advanced capabilities: databases, browser automation, web search
   - Config: `config.json` under `mcp.servers`
-  - Reference: `$KILO_BASE/packages/web/src/content/docs/mcp-servers.mdx`
+  - Reference: `$KILO_BASE/kilo/packages/web/src/content/docs/mcp-servers.mdx`
 
 - **LSP**: Language Server Protocol integration
   - Auto-invoked by Write/Edit tools for syntax validation
   - Features: definitions, references, hover, symbols, call hierarchy
   - Manual tool: `mcp_lsp`
-  - Reference: `$KILO_BASE/packages/web/src/content/docs/lsp.mdx`
+  - Reference: `$KILO_BASE/kilo/packages/web/src/content/docs/lsp.mdx`
 
 - **ACP**: Agent Client Protocol - use Kilo as agent in editors/IDEs
-  - Reference: `$KILO_BASE/packages/web/src/content/docs/acp.mdx`
+  - Reference: `$KILO_BASE/kilo/packages/web/src/content/docs/acp.mdx`
 
 **SDK & Extensibility**:
 
 - **Client SDK**: TypeScript client for HTTP API remote control
-  - Location: `$KILO_BASE/packages/sdk/js/`
-  - Reference: `$KILO_BASE/packages/web/src/content/docs/{sdk,server}.mdx`
+  - Location: `$KILO_BASE/kilo/packages/sdk/js/`
+  - Reference: `$KILO_BASE/kilo/packages/web/src/content/docs/{sdk,server}.mdx`
 
 - **Plugins**: TypeScript hooks into Kilo events
   - Hooks: session lifecycle, tool execution, message processing
-  - Example: `$KILO_BASE/packages/opencode/src/plugin/eventlog.ts`
-  - Reference: `$KILO_BASE/packages/web/src/content/docs/plugins.mdx`
+  - Example: `$KILO_BASE/kilo/packages/opencode/src/plugin/eventlog.ts`
+  - Reference: `$KILO_BASE/kilo/packages/web/src/content/docs/plugins.mdx`
 
 ## Repository Structure
 
-- **Source code**: `$KILO_BASE/packages/opencode/src/`
-- **Documentation**: `$KILO_BASE/packages/web/src/content/docs/`
-- **Tests**: `$KILO_BASE/packages/opencode/test/`
-- **SDK**: `$KILO_BASE/packages/sdk/js/`
+- **Source code**: `$KILO_BASE/kilo/packages/opencode/src/`
+- **Documentation**: `$KILO_BASE/kilo/packages/web/src/content/docs/`
+- **Tests**: `$KILO_BASE/kilo/packages/opencode/test/`
+- **SDK**: `$KILO_BASE/kilo/packages/sdk/js/`
+
+## Cloud Repository (Backend)
+
+**Location**: `$KILO_BASE/cloud`
+
+**What it is**: Next.js app + tRPC API + Cloudflare Workers powering cloud-agent, triage/fix/review, app builder, indexing, deployments, and ingestion.
+
+**Where to look (fast)**:
+
+- **tRPC routers**: `$KILO_BASE/cloud/src/routers/` (main API surface)
+- **REST endpoints**: `$KILO_BASE/cloud/src/app/api/` (webhooks, usage, integrations)
+- **Workers/services**: `$KILO_BASE/cloud/cloud-agent/`, `$KILO_BASE/cloud/cloud-agent-next/`, `$KILO_BASE/cloud/cloudflare-*/`
+
+### tRPC vs REST
+
+The cloud repo exposes two API layers:
+
+**tRPC** (primary, type-safe):
+- Base: `https://app.kilo.ai/api/trpc/{procedure}`
+- Format: `GET /trpc/{namespace}.{procedure}?input={json}` or `POST /trpc/{namespace}.{procedure}`
+- Requires: `Authorization: Bearer $KILO_API_KEY`
+- Tool: `@tool/kilo-cloud.ts` wraps these endpoints
+
+**REST** (webhooks, internal, usage):
+- Various paths under `/api/`
+- Some require auth, some are public webhooks
+
+### Troubleshooting @tool/kilo-cloud.ts
+
+- Search for procedure names and input schemas in routers:
+  - `rg "Procedure" $KILO_BASE/cloud/src/routers -g "*.ts"`
+  - `rg "\.input\(" $KILO_BASE/cloud/src/routers -g "*.ts"`
+- List router files: `find $KILO_BASE/cloud/src/routers -name "*router*.ts" -not -name "*.test.ts"`
+
+### Quick Code Pointers
+
+- Cloud agent sessions: `$KILO_BASE/cloud/src/routers/cloud-agent-router.ts`
+- Agent profiles: `$KILO_BASE/cloud/src/routers/agent-profiles-router.ts`
+- Webhook triggers: `$KILO_BASE/cloud/src/routers/webhook-triggers-router.ts`
+- Usage data: `$KILO_BASE/cloud/src/app/api/profile/usage/route.ts`
 
 ## Directory Structure
 
@@ -189,7 +229,7 @@ kilo --help                    # Full command reference
 
 ```bash
 # From your Kilo repository clone
-cd $KILO_BASE/packages/opencode
+cd $KILO_BASE/kilo/packages/opencode
 bun dev                    # Start TUI
 bun dev -- --help          # Show all options
 bun dev -- --port 4001     # Custom port
@@ -197,11 +237,11 @@ bun dev -- serve           # API server only
 bun dev -- run "test"      # Send test message
 
 # Web application (Vite dev server)
-cd $KILO_BASE/packages/app
+cd $KILO_BASE/kilo/packages/app
 bun dev                    # Start Vite server, click link to see live changes
 
 # Desktop application (Tauri)
-cd $KILO_BASE/packages/desktop
+cd $KILO_BASE/kilo/packages/desktop
 bun tauri dev              # Start desktop app in development mode
 bun tauri build            # Build desktop binary
 ```
@@ -471,7 +511,7 @@ Location: `~/.config/kilo/command/{name}.md`
 
 **Usage**: `/command-name` in chat
 
-**Official docs**: `$KILO_BASE/packages/web/src/content/docs/commands.mdx`
+**Official docs**: `$KILO_BASE/kilo/packages/web/src/content/docs/commands.mdx`
 
 ### Skills
 
@@ -485,7 +525,7 @@ Location: `~/.config/kilo/skill/{name}/SKILL.md`
 
 **Create/Edit**: Use Write for new (creates dir+file), Edit for existing
 
-**Official docs**: `$KILO_BASE/packages/web/src/content/docs/skills.mdx`
+**Official docs**: `$KILO_BASE/kilo/packages/web/src/content/docs/skills.mdx`
 
 ### Agents
 
@@ -497,41 +537,41 @@ Location: `~/.config/kilo/agent/{name}.md`
 
 **Usage**: `--agent name` or switch with Tab
 
-**Official docs**: `$KILO_BASE/packages/web/src/content/docs/agents.mdx`
+**Official docs**: `$KILO_BASE/kilo/packages/web/src/content/docs/agents.mdx`
 
 ### Tools (Advanced)
 
-**Source**: `$KILO_BASE/packages/kilo/src/tool/`
+**Source**: `$KILO_BASE/kilo/packages/kilo/src/tool/`
 
 **Examples**: `calculate.ts`, `speak.ts`, `bash.ts`, `read.ts`, `edit.ts`
 
 **Pattern**: Implement `Tool.Info` with `execute()`, validate with Zod
 
-**Reference**: `$KILO_BASE/packages/kilo/src/tool/tool.ts` for interfaces
+**Reference**: `$KILO_BASE/kilo/packages/kilo/src/tool/tool.ts` for interfaces
 
 **Official docs**:
 
-- `$KILO_BASE/packages/web/src/content/docs/tools.mdx`
-- `$KILO_BASE/packages/web/src/content/docs/custom-tools.mdx`
+- `$KILO_BASE/kilo/packages/web/src/content/docs/tools.mdx`
+- `$KILO_BASE/kilo/packages/web/src/content/docs/custom-tools.mdx`
 
 ### Plugins (Advanced)
 
-**Source**: `$KILO_BASE/packages/kilo/src/plugin/`
+**Source**: `$KILO_BASE/kilo/packages/kilo/src/plugin/`
 
 **Example**: `eventlog.ts`
 
-**Pattern**: Hook system - inspect `$KILO_BASE/packages/kilo/src/plugin/index.ts` for available hooks
+**Pattern**: Hook system - inspect `$KILO_BASE/kilo/packages/kilo/src/plugin/index.ts` for available hooks
 
 **Note**: Requires deep internals knowledge
 
-**Official docs**: `$KILO_BASE/packages/web/src/content/docs/plugins.mdx`
+**Official docs**: `$KILO_BASE/kilo/packages/web/src/content/docs/plugins.mdx`
 
 ## Development
 
 ### Testing
 
 ```bash
-cd $KILO_BASE/packages/opencode
+cd $KILO_BASE/kilo/packages/opencode
 bun test                          # Run all tests
 bun test test/tool/bash.test.ts   # Specific test
 ```
@@ -550,8 +590,8 @@ bun run build
 
 ### Workflow
 
-1. Make changes in `$KILO_BASE/packages/opencode/src/`
-2. Test with `bun dev` from `$KILO_BASE/packages/opencode/`
+1. Make changes in `$KILO_BASE/kilo/packages/opencode/src/`
+2. Test with `bun dev` from `$KILO_BASE/kilo/packages/opencode/`
 3. Run type checking: `bun run typecheck`
 4. Create commits when ready
 
@@ -559,7 +599,7 @@ bun run build
 
 ### Source Structure
 
-Key directories in `$KILO_BASE/packages/opencode/src/`:
+Key directories in `$KILO_BASE/kilo/packages/opencode/src/`:
 
 - `session/` - Session management, compaction, prompts, LLM interaction
 - `tool/` - Built-in tools (one file per tool)
@@ -614,9 +654,9 @@ Key directories in `$KILO_BASE/packages/opencode/src/`:
 ## Documentation
 
 - **Official docs**: https://kilo.ai/docs
-- **Doc sources**: `$KILO_BASE/packages/web/src/content/docs/`
-- **Source code**: `$KILO_BASE/packages/opencode/src/`
-- **Tests**: `$KILO_BASE/packages/opencode/test/`
+- **Doc sources**: `$KILO_BASE/kilo/packages/web/src/content/docs/`
+- **Source code**: `$KILO_BASE/kilo/packages/opencode/src/`
+- **Tests**: `$KILO_BASE/kilo/packages/opencode/test/`
 
 ---
 
