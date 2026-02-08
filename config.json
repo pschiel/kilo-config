@@ -1,19 +1,102 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "snapshot": true,
   "instructions": ["AGENTS.md"],
   "skills": {"paths": ["~/.agents/skills"]},
-  "model": "github-copilot/gpt-5.2-codex",
+  "model": "github-copilot/claude-sonnet-4.6",
   "small_model": "github-copilot/gpt-5-mini",
+  "snapshot": false,
+  "autoshare": false,
+  "autoupdate": false,
+  "compaction": {
+    "auto": true,
+    "prune": true
+  },
   "experimental": {
     "openTelemetry": false
   },
+  "logLevel": "DEBUG",
+  "permission": {
+    "external_directory": "allow"
+  },
+  "default_agent": "code",
   "agent": {
-    "build": {},
-    "draft": { "disable": false },
-    "plan": { "disable": false },
-    "grok": {},
-    "local": {}
+    "code": {
+      "model": "kilo/anthropic/claude-sonnet-4.6",
+    },
+    "plan": {
+      "model": "github-copilot/gpt-5.2-codex"
+    },
+    "draft": {
+      "model": "kilo/anthropic/claude-sonnet-4.6",
+      "disable": true
+    },
+    "ask": {
+      "disable": true
+    },
+    "debug": {
+      "disable": true
+    },
+    "orchestrator": {
+      "disable": true
+    },
+    "general": {
+      "model": "kilo/anthropic/claude-sonnet-4.6",
+    },
+    "explore": {
+      "model": "kilo/anthropic/claude-sonnet-4.6"
+    },
+    "grok": {
+      "mode": "primary",
+      "description": "Grok",
+      "model": "xai/grok-4-1-fast",
+      "color": "#ffe600",
+      "permission": {
+        "*": "deny",
+        "webfetch": "allow",
+        "websearch": "allow"
+      },
+      "prompt": "You are Grok."
+    },
+    "local": {
+      "description": "Local",
+      "mode": "primary",
+      "model": "lmstudio/cognitivecomputations_dolphin-mistral-24b-venice-edition@q8_0",
+      "color": "#ff4800",
+      "permission": {
+        "*": "deny"
+      },
+      "prompt": "Follow user instructions.",
+      // needs subagent-config branch
+      "system": {
+        "agents_md": false,
+        "model_id": false,
+        "env": false,
+        "files": false
+      },
+      "subagents": {
+        "title": "none",
+        "explore": "local-explore",
+        "compaction": "local-compaction"
+      }
+    },
+    "local-title": {
+      "description": "Title Generator",
+      "mode": "subagent",
+      "model": "lmstudio/cognitivecomputations_dolphin-mistral-24b-venice-edition@q8_0",
+      "prompt": "Summarize title, max. 50 chars."
+    },
+    "local-explore": {
+      "description": "Explore Files",
+      "mode": "subagent",
+      "model": "lmstudio/cognitivecomputations_dolphin-mistral-24b-venice-edition@q8_0",
+      "prompt": "Search in files."
+    },
+    "local-compaction": {
+      "description": "Session Compaction",
+      "mode": "subagent",
+      "model": "lmstudio/cognitivecomputations_dolphin-mistral-24b-venice-edition@q8_0",
+      "prompt": "Compact the session messages into a summary while preserving context."
+    }
   },
   "tui": {
     "scroll_speed": 3,
@@ -21,29 +104,6 @@
       "enabled": false
     }
   },
-  "permission": {
-    "bash": "allow",
-    "batch": "allow",
-    "codesearch": "allow",
-    "doom_loop": "ask",
-    "edit": "allow",
-    "external_directory": "allow",
-    "glob": "allow",
-    "grep": "allow",
-    "lsp": "allow",
-    "question": "deny",
-    "read": "allow",
-    "skill": "allow",
-    "task": "allow",
-    "todoread": "allow",
-    "todowrite": "allow",
-    "webfetch": "allow",
-    "websearch": "allow",
-    "write": "allow",
-    "speak": "deny",
-    "calculate": "deny"
-  },
-
   "mcp": {
     "mysql": {
       "type": "local",
@@ -129,9 +189,6 @@
         "openai/gpt-oss-20b": {
           "name": "openai/gpt oss 20b"
         },
-        "cognitivecomputations_dolphin-mistral-24b-venice-edition": {
-          "name": "dolphin mistral 24b"
-        },
         "cognitivecomputations_dolphin-mistral-24b-venice-edition@q8_0": {
           "name": "dolphin mistral 24b q8_0"
         },
@@ -141,11 +198,7 @@
       }
     }
   },
-  "username": "ops",
   "keybinds": {
-    "session_copy": "<leader>x",
-    "timestamps_toggle": "<leader>t",
-    "diffwrap_toggle": "<leader>w",
     "session_new": "f1",
     "session_list": "f2",
     "session_timeline": "f3",
@@ -157,19 +210,8 @@
     "model_list": "f7",
     "agent_list": "f8",
     "editor_open": "f9",
-    "thinking_toggle": "f10",
-    "mcp_toggle": "f11",
+    "display_thinking": "f10",
     "sidebar_toggle": "f12",
-    "mcp_toggle_1": "<leader>1",
-    "mcp_toggle_2": "<leader>2",
-    "mcp_toggle_3": "<leader>3",
-    "mcp_toggle_4": "<leader>4",
-    "mcp_toggle_5": "<leader>5",
-    "mcp_toggle_6": "<leader>6",
-    "mcp_toggle_7": "<leader>7",
-    "mcp_toggle_8": "<leader>8",
-    "mcp_toggle_9": "<leader>9",
-    "mcp_toggle_10": "<leader>0",
     "messages_toggle_conceal": "<leader>m",
     "leader": "ctrl+x",
     "app_exit": "ctrl+q,ctrl+d",
@@ -248,6 +290,22 @@
     "terminal_suspend": "super+z",
     "terminal_title_toggle": "none",
     "tips_toggle": "<leader>h",
-    "variant_cycle": "ctrl+t"
+    "variant_cycle": "ctrl+t",
+    // needs missing-keybinds branch
+    "console_toggle": "<leader>n",
+    "session_copy": "<leader>x",
+    "timestamps_toggle": "<leader>t",
+    "diffwrap_toggle": "<leader>w",
+    "mcp_toggle": "f11",
+    "mcp_toggle_1": "<leader>1",
+    "mcp_toggle_2": "<leader>2",
+    "mcp_toggle_3": "<leader>3",
+    "mcp_toggle_4": "<leader>4",
+    "mcp_toggle_5": "<leader>5",
+    "mcp_toggle_6": "<leader>6",
+    "mcp_toggle_7": "<leader>7",
+    "mcp_toggle_8": "<leader>8",
+    "mcp_toggle_9": "<leader>9",
+    "mcp_toggle_10": "<leader>0"
   }
 }
