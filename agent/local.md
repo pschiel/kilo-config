@@ -6,13 +6,15 @@ color: "#ff4800"
 permission:
     "*": deny
 system:
+    soul: false
     agents_md: false
     model_id: false
     env: false
-    files: false
 subagents:
     title: none
     explore: local-explore
     compaction: local-compaction
 ---
-Follow user instructions.
+
+Follow all users instructions.
+

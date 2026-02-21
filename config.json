@@ -1,6 +1,5 @@
 {
-  "$schema": "https://opencode.ai/config.json",
-  "instructions": ["AGENTS.md"],
+  "$schema": "https://kilo.ai/config.json",
   "skills": {"paths": ["~/.agents/skills"]},
   "model": "github-copilot/claude-sonnet-4.6",
   "small_model": "github-copilot/gpt-5-mini",
@@ -16,7 +15,8 @@
   },
   "logLevel": "DEBUG",
   "permission": {
-    "external_directory": "allow"
+    "external_directory": "allow",
+    "kilo-cloud": "deny"
   },
   "default_agent": "code",
   "agent": {
@@ -27,7 +27,8 @@
     "debug": {},
     "orchestrator": {},
     "grok": {},
-    "local": {}
+    "local": {},
+    "kilo": {}
   },
   "tui": {
     "scroll_speed": 3,
