@@ -14,7 +14,7 @@ Install:
 Usage:
 - Start Pocket TTS server: `uvx pocket-tts serve --port 5003`
 - Adjust prompt/description below as needed
-- Both DESCRIPTION (tool schema) and AGENTS.md are needed: DESCRIPTION reaches the LLM via the tools API parameter; AGENTS.md is injected into the system prompt text. Both must agree on when and how to use the tool.
+- Also add instructions to AGENTS.md when/how to use this tool
 
 See also: https://github.com/kyutai-labs/pocket-tts
  */
