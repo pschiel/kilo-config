@@ -9,14 +9,15 @@ Note: needs tool-stop-metadata branch of kilocode to work properly, otherwise th
 
 Install:
 - Add `"speaker": "^0.5.4"` to `~/.config/kilo/package.json`
-- Build speaker plugin: `npm install && npm rebuild speaker`
+- Build speaker plugin: `cd ~/.config/kilo && npm install && npm rebuild speaker`
 
 Usage:
 - Start Pocket TTS server: `uvx pocket-tts serve --port 5003`
 - Adjust prompt/description below as needed
 - Also add instructions to AGENTS.md when/how to use this tool
 
-See also: https://github.com/kyutai-labs/pocket-tts
+Pocket TTS: https://github.com/kyutai-labs/pocket-tts
+uv/uvx: https://docs.astral.sh/uv/getting-started/installation/
  */
 
 const DESCRIPTION = `Speak a short message aloud to the user via text-to-speech.
