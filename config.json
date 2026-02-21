@@ -1,15 +1,28 @@
 {
-  "$schema": "https://kilo.ai/config.json",
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": [],
+  "username": "ops",
+  "instructions": ["AGENTS.md"],
   "skills": {"paths": ["~/.agents/skills"]},
   "model": "github-copilot/claude-sonnet-4.6",
-  "small_model": "github-copilot/gpt-5-mini",
+  "small_model": "github-copilot/gpt-5-mini", // used for title/message summaries
   "snapshot": false,
+  "share": "manual",
   "autoshare": false,
   "autoupdate": false,
   "compaction": {
     "auto": true,
     "prune": true
   },
+  "theme": "kilo",
+  "server": {
+    "cors": [],
+    "hostname": "127.0.0.1",
+    "port": 4096,
+    "mdns": false,
+    "mdnsDomain": "kilo.local"
+  },
+  "disabled_providers": [],
   "experimental": {
     "openTelemetry": false
   },
@@ -19,6 +32,7 @@
     "kilo-cloud": "deny"
   },
   "default_agent": "code",
+  // define agents here just for TAB ordering
   "agent": {
     "code": {},
     "plan": {},
@@ -223,7 +237,7 @@
     "terminal_title_toggle": "none",
     "tips_toggle": "<leader>h",
     "variant_cycle": "ctrl+t",
-    // needs missing-keybinds branch
+    // needs missing-keybinds branch https://github.com/Kilo-Org/kilo/pull/127
     "console_toggle": "<leader>n",
     "session_copy": "<leader>x",
     "timestamps_toggle": "<leader>t",
