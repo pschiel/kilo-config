@@ -1,32 +1,15 @@
 # kilo config
 
-## config.json
+```
+config.json                   Main config
 
-Main kilo config. Includes:
+agent/                        Agent configs
 
-- Most options
-- All keybinds
-- Some MCP configs
-- LMStudio setup
+command/                      Commands
 
-*Note: MCP toggle keybinds needs a [patch](https://github.com/Kilo-Org/kilo/pull/127)*
+doc/
+└ kilo-win32.md               Windows specific docs
 
-## agent
-
-Agent configs.
-
-*Note: system/subagents config needs a patch.*
-
-## command
-
-...
-
-## tool
-
-Custom tools:
-
-[kilo-cloud](tool/kilo-cloud.ts) - provides access to Kilo Cloud API endpoints via tRPC and REST
-
-## doc/
-
-[kilo-win32.md](doc/kilo-win32.md) - Windows specific docs
+tool/
+└ kilo-cloud.ts               Kilo Cloud tRPC/REST API tool
+```
