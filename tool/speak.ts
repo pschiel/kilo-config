@@ -5,7 +5,7 @@ import { tool } from "@kilocode/plugin";
 
 Sends a message to a Pocket TTS server and plays the returned audio via speaker lib.
 
-Note: needs tool-stop-metadata branch of kilocode to work properly, otherwise the agent will continue after speaking.
+Note: needs https://github.com/Kilo-Org/kilo/pull/581 to work properly, otherwise the agent will continue after speaking.
 
 Install:
 - Add `"speaker": "^0.5.4"` to `~/.config/kilo/package.json`
