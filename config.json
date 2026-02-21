@@ -20,83 +20,14 @@
   },
   "default_agent": "code",
   "agent": {
-    "code": {
-      "model": "kilo/anthropic/claude-sonnet-4.6",
-    },
-    "plan": {
-      "model": "github-copilot/gpt-5.2-codex"
-    },
-    "draft": {
-      "model": "kilo/anthropic/claude-sonnet-4.6",
-      "disable": true
-    },
-    "ask": {
-      "disable": true
-    },
-    "debug": {
-      "disable": true
-    },
-    "orchestrator": {
-      "disable": true
-    },
-    "general": {
-      "model": "kilo/anthropic/claude-sonnet-4.6",
-    },
-    "explore": {
-      "model": "kilo/anthropic/claude-sonnet-4.6"
-    },
-    "grok": {
-      "mode": "primary",
-      "description": "Grok",
-      "model": "xai/grok-4-1-fast",
-      "color": "#ffe600",
-      "permission": {
-        "*": "deny",
-        "webfetch": "allow",
-        "websearch": "allow"
-      },
-      "prompt": "You are Grok."
-    },
-    "local": {
-      "description": "Local",
-      "mode": "primary",
-      "model": "lmstudio/cognitivecomputations_dolphin-mistral-24b-venice-edition@q8_0",
-      "color": "#ff4800",
-      "permission": {
-        "*": "deny"
-      },
-      "prompt": "Follow user instructions.",
-      // needs subagent-config branch
-      "system": {
-        "agents_md": false,
-        "model_id": false,
-        "env": false,
-        "files": false
-      },
-      "subagents": {
-        "title": "none",
-        "explore": "local-explore",
-        "compaction": "local-compaction"
-      }
-    },
-    "local-title": {
-      "description": "Title Generator",
-      "mode": "subagent",
-      "model": "lmstudio/cognitivecomputations_dolphin-mistral-24b-venice-edition@q8_0",
-      "prompt": "Summarize title, max. 50 chars."
-    },
-    "local-explore": {
-      "description": "Explore Files",
-      "mode": "subagent",
-      "model": "lmstudio/cognitivecomputations_dolphin-mistral-24b-venice-edition@q8_0",
-      "prompt": "Search in files."
-    },
-    "local-compaction": {
-      "description": "Session Compaction",
-      "mode": "subagent",
-      "model": "lmstudio/cognitivecomputations_dolphin-mistral-24b-venice-edition@q8_0",
-      "prompt": "Compact the session messages into a summary while preserving context."
-    }
+    "code": {},
+    "plan": {},
+    "draft": {},
+    "ask": {},
+    "debug": {},
+    "orchestrator": {},
+    "grok": {},
+    "local": {}
   },
   "tui": {
     "scroll_speed": 3,
