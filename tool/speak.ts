@@ -7,10 +7,15 @@ Sends a message to a Pocket TTS server and plays the returned audio via speaker 
 
 Note: needs tool-stop-metadata branch of kilocode to work properly, otherwise the agent will continue after speaking.
 
-Usage:
+Install:
 - Add `"speaker": "^0.5.4"` to `~/.config/kilo/package.json`
 - Build speaker plugin: `npm install && npm rebuild speaker`
+
+Usage:
 - Start Pocket TTS server: `uvx pocket-tts serve --port 5003`
+- Adjust prompt/description below as needed
+
+See also: https://github.com/kyutai-labs/pocket-tts
  */
 
 const DESCRIPTION = `Speak a short message aloud to the user via text-to-speech.
