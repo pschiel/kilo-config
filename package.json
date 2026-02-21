@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "@kilocode/plugin": "*"
+    "@kilocode/plugin": "*",
+    "speaker": "^0.5.4",
+    "@opencode-ai/plugin": "*"
   }
 }

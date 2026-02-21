@@ -14,7 +14,7 @@
     "auto": true,
     "prune": true
   },
-  "theme": "kilo",
+  "theme": "opencode",
   "server": {
     "cors": [],
     "hostname": "127.0.0.1",
@@ -29,7 +29,10 @@
   "logLevel": "DEBUG",
   "permission": {
     "external_directory": "allow",
-    "kilo-cloud": "deny"
+    "kilo-cloud": "deny",
+    "question": "deny",
+    "plan_enter": "deny",
+    "plan_exit": "deny"
   },
   "default_agent": "code",
   // define agents here just for TAB ordering
