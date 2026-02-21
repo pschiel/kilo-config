@@ -24,7 +24,7 @@ Agent configs.
 
 [tool/kilo-cloud.ts](tool/kilo-cloud.ts) - provides access to Kilo Cloud API endpoints via tRPC and REST.
 
-Usage: set `KILO_API_KEY`, ask agent about kilo-cloud tool.
+Usage: set `KILO_API_KEY` env var, ask agent about kilo-cloud tool.
 
 ## doc/
 
