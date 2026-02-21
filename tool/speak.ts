@@ -14,17 +14,20 @@ Install:
 Usage:
 - Start Pocket TTS server: `uvx pocket-tts serve --port 5003`
 - Adjust prompt/description below as needed
+- Both DESCRIPTION (tool schema) and AGENTS.md are needed: DESCRIPTION reaches the LLM via the tools API parameter; AGENTS.md is injected into the system prompt text. Both must agree on when and how to use the tool.
 
 See also: https://github.com/kyutai-labs/pocket-tts
  */
 
 const DESCRIPTION = `Speak a short message aloud to the user via text-to-speech.
 
+MANDATORY: Call this tool at the end of EVERY assistant turn — including after completing a task, after asking the user a question, and after any error or waiting state.
+
 USAGE:
-- This tool MUST be called as your FINAL action
-- Call this tool ONCE with your complete response
-- Keep messages conversational and brief (1-2 sentences ideal)
-- Use natural spoken language without special characters
+- Call this tool ONCE as the very last action of every turn
+- Summarize results in 1-2 sentences; single words ("Done", "Failed", "Ready") are fine for trivial turns
+- Use natural spoken language — no markdown, no special characters
+- Keep it brief: the user will hear it aloud
 `;
 
 export default tool({
@@ -32,8 +35,10 @@ export default tool({
   args: {
     text: tool.schema
       .string()
-      .describe("Use speak tool after EVERY assistant turn"),
-    speaker_id: tool.schema
+      .describe(
+        "Short spoken summary of what was done or what the assistant needs from the user. 1-2 sentences max.",
+      ),
+    voice: tool.schema
       .string()
       .optional()
       .describe(
@@ -46,9 +51,9 @@ export default tool({
 
     const form = new FormData();
     form.append("text", text);
-    const speaker_id = args.speaker_id || "azelma";
+    const voice = args.voice || "azelma";
     // Predefined names and hf:// URIs are voice_url; http(s):// URLs too
-    form.append("voice_url", speaker_id);
+    form.append("voice_url", voice);
 
     try {
       const response = await fetch(`${ttsUrl}/tts`, {
