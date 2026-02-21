@@ -46,6 +46,12 @@ export default tool({
       .describe(
         "Voice URL or predefined voice name (e.g. 'alba', 'marius', 'jean'). Leave empty for default voice.",
       ),
+    gain: tool.schema
+      .number()
+      .optional()
+      .describe(
+        "Audio gain multiplier (e.g. 0.5 for quieter, 2.0 for louder). Default is 1.0.",
+      ),
   },
   async execute(args) {
     const text = args.text;
@@ -95,6 +101,20 @@ export default tool({
 
       const audioData = wavData.subarray(dataOffset);
 
+      const gain = args.gain ?? 1.0;
+      let processedAudio = audioData;
+      if (gain !== 1.0 && bitsPerSample === 16) {
+        processedAudio = Buffer.alloc(audioData.length);
+        for (let i = 0; i < audioData.length; i += 2) {
+          const sample = audioData.readInt16LE(i);
+          const scaled = Math.max(
+            -32768,
+            Math.min(32767, Math.round(sample * gain)),
+          );
+          processedAudio.writeInt16LE(scaled, i);
+        }
+      }
+
       const speaker = new Speaker({
         channels: numChannels,
         bitDepth: bitsPerSample,
@@ -119,7 +139,7 @@ export default tool({
           });
         });
 
-        speaker.write(audioData);
+        speaker.write(processedAudio);
         speaker.end();
       });
     } catch (error) {
