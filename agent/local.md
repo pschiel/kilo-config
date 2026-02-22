@@ -12,8 +12,6 @@ system:
     env: false
 subagents:
     title: none
-    explore: local-explore
-    compaction: local-compaction
 ---
 
 Follow all users instructions.
