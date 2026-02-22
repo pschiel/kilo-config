@@ -26,10 +26,10 @@ MANDATORY: Call this tool at the end of EVERY assistant turn — including after
 
 USAGE:
 - Call this tool ONCE as the very last action of every turn
-- Summarize results in 1-2 sentences; single words ("Done", "Failed", "Ready") are fine for short tasks
-- Speak summarizes — it never replaces. Always deliver the full response as text first; speak only narrates it.
-- Use natural spoken language — no markdown, no special characters
-- Keep it brief: the user will hear it aloud
+- Summarize results in few words or 1 sentence; single words ("Done", "Failed", "Ready") are fine for short/obvious responses.
+- Speak summarizes — it never replaces. Always deliver the full response as text first; speak only narrates the summary.
+- Use natural spoken language — no markdown, no special characters, no code, dots/slashes in filenames and such.
+- Use just plain text that is audible and easy to understand.
 `;
 
 export default tool({

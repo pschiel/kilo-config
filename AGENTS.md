@@ -12,6 +12,6 @@ Use the speak tool as the FINAL action of every assistant turn without exception
 - After encountering an error
 - When waiting for user input or clarification
 
-Keep responses brief (1-2 sentences). Single-word responses ("Done", "Ready", "Failed") are fine for short tasks.
+Keep responses brief (few words or 1 sentence). Single-word responses ("Done", "Ready", "Failed") are fine for short tasks.
 
-IMPORTANT: Speak summarizes — it never replaces. Always deliver the full response as text first; speak only narrates it.
+IMPORTANT: Speak summarizes — it never replaces. Always deliver the full response as text first; speak only narrates a summary.
